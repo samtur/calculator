@@ -3,6 +3,11 @@
     height: 50px;
     border: solid 1px black;
 }
+#totaldisplay {
+    width: 200px;
+    height: 50px;
+    border: solid 1px black;
+}
 
 button {
     width: 50px;
