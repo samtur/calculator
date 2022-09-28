@@ -19,8 +19,11 @@ const caldisplay = document.querySelector("#caldisplay");
 const totaldisplay = document.querySelector("#totaldisplay");
 
 // Variables
-let num = null;
-let value = [];
+let num1 = null;
+let num2 = null;
+let operation = null;
+let total = null;
+let equals = false;
 
 // Event Listeners NumBtns
 document.querySelectorAll(".numbtn").forEach((item) => {
@@ -48,135 +51,123 @@ document.querySelectorAll(".numbtn").forEach((item) => {
 });
 
 // Event Listeners Operator Buttons
+
+document.querySelectorAll(".opbtn").forEach((item) => {
+  item.addEventListener("click", (e) => {
+    if (caldisplay.textContent) {
+      if (num2 === null && num1 !== null) {
+        num2 = caldisplay.textContent;
+        num2 = parseInt(num2);
+        caldisplay.textContent = null;
+        operate(operation);
+      }
+      if (num1 === null) {
+        num1 = caldisplay.textContent;
+        num1 = parseInt(num1);
+        caldisplay.textContent = null;
+      }
+    }
+  });
+});
+
 btnadd.addEventListener("click", () => {
-  if (num === null) {
-    num = caldisplay.textContent;
-    num = parseInt(num);
-    value.push(num);
-    caldisplay.textContent = null;
-    console.log(value);
-  } else {
-    num = caldisplay.textContent;
-    num = parseInt(num);
-    value.push(num);
-    caldisplay.textContent = null;
-    console.log(value);
-    return add(value);
+  console.log(num1, num2, total, equals);
+  if (operation === null) {
+    operation = "add";
   }
 });
 
 btnsub.addEventListener("click", () => {
-  if (num === null) {
-    num = caldisplay.textContent;
-    num = parseInt(num);
-    value.push(num);
-    caldisplay.textContent = null;
-    console.log(value);
-  } else {
-    num = caldisplay.textContent;
-    num = parseInt(num);
-    value.push(num);
-    caldisplay.textContent = null;
-    console.log(value);
-    return subtract(value);
+  console.log(num1, num2);
+  if (operation === null) {
+    operation = "subtract";
   }
 });
 
-// btnmulti.addEventListener("click", () => {
-//   if (num1 === null) {
-//     num1 = caldisplay.textContent;
-//     caldisplay.textContent = null;
-//     console.log(num1);
-//   }
-//   btnequals.addEventListener("click", () => {
-//     num2 = caldisplay.textContent;
-//     caldisplay.textContent = null;
-//     console.log(num2);
-//     multiply(num1, num2);
-//   });
-// });
+btnmulti.addEventListener("click", () => {
+  console.log(num1, num2);
+  if (operation === null) {
+    operation = "multiply";
+  }
+});
 
-// btndivi.addEventListener("click", () => {
-//   if (num1 === null) {
-//     num1 = caldisplay.textContent;
-//     caldisplay.textContent = null;
-//   }
-//   btnequals.addEventListener("click", () => {
-//     num2 = caldisplay.textContent;
-//     caldisplay.textContent = null;
-//     divide(num1, num2);
-//   });
-// });
+btndivi.addEventListener("click", () => {
+  console.log(num1, num2);
+  if (operation === null) {
+    operation = "divide";
+  }
+});
+
+btnequals.addEventListener("click", (e) => {
+  equals = true;
+  operate(operation);
+});
 
 // Opertaor Functions
-function add(array) {
-  array.reduce((num1, num2) => {
-    total = num1 + num2;
-    return total;
-  });
-  console.log(total);
+function add(value1, value2) {
+  total = value1 + value2;
   totaldisplay.textContent = total;
-  value = [];
-  value.push(total);
-  console.log(value);
+  if (!equals) {
+    operation = null;
+    num2 = null;
+    num1 = total;
+    return;
+  }
+  if (equals) {
+    operation = null;
+    num2 = null;
+    num1 = null;
+    total = null;
+    equals = false;
+    console.log(num1, num2, total, equals);
+    return;
+  }
 }
 
-function subtract(array) {
-  array.reduce((num1, num2) => {
-    total = num1 - num2;
-    return total;
-  });
-  console.log(total);
+function subtract(value1, value2) {
+  total = value1 - value2;
   totaldisplay.textContent = total;
-  value = [];
-  value.push(total);
-  console.log(value);
+  operation = null;
+  console.log(operation);
+  num2 = null;
+  num1 = total;
+  console.log(num1, num2);
+  return;
 }
 
-// function multiply(num1, num2) {
-//   let total = 0;
-//   num1 = parseInt(num1);
-//   num2 = parseInt(num2);
-//   total = num1 * num2;
-//   caldisplay.textContent = total;
-//   return total;
-// }
+function multiply(value1, value2) {
+  total = value1 * value2;
+  totaldisplay.textContent = total;
+  operation = null;
+  console.log(operation);
+  num2 = null;
+  num1 = total;
+  console.log(num1, num2);
+  return;
+}
 
-// function divide(num1, num2) {
-//   let total = 0;
-//   num1 = parseInt(num1);
-//   num2 = parseInt(num2);
-//   total = num1 / num2;
-//   caldisplay.textContent = total;
-//   return total;
-// }
+function divide(value1, value2) {
+  total = value1 / value2;
+  totaldisplay.textContent = total;
+  operation = null;
+  console.log(operation);
+  num2 = null;
+  num1 = total;
+  console.log(num1, num2);
+  return;
+}
 
-// function operate(num1, num2, operate) {
-//     if(operate === /* add */) {
-//         add(num1, num2)
-//     }
-//     if(operate === /* subtract */) {
-//         subtract(num1, num2)
-//     }
-//     if(operate === /* multiply */) {
-//         multiply(num1, num2)
-//     }
-//     if(operate === /* divide */) {
-//         divide(num1, num2)
-//     }
-// }
-
-/* Push num to the total array (num becomes total)
-   Listen for the operation
-   Push num to the total array
-   Perform the operation on total and num in arrray. 
-   Listen for the operation
-   Push num to the total array
-   Perform the operation 
-   Push num to the total array
-   Perform the operation
-   ....
-  If equals is pressed
-  Perform the operation
-  pressed display total from the array.
-     */
+function operate(operation) {
+  if (operation === "add") {
+    add(num1, num2);
+  }
+  if (operation === "subtract") {
+    subtract(num1, num2);
+  }
+  if (operation === "multiply") {
+    multiply(num1, num2);
+  }
+  if (operation === "divide") {
+    divide(num1, num2);
+  }
+}
