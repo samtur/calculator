@@ -9,12 +9,14 @@ const btn7 = document.querySelector("#btn7");
 const btn8 = document.querySelector("#btn8");
 const btn9 = document.querySelector("#btn9");
 const btn0 = document.querySelector("#btn0");
+const btndecimal = document.querySelector("#btndecimal");
 const btnadd = document.querySelector("#btnadd");
 const btnsub = document.querySelector("#btnsub");
 const btnmulti = document.querySelector("#btnmulti");
 const btndivi = document.querySelector("#btndivi");
 const btnequals = document.querySelector("#btnequals");
 const btnclear = document.querySelector("#btnclear");
+const btndelete = document.querySelector("#btndelete");
 const caldisplay = document.querySelector("#caldisplay");
 const totaldisplay = document.querySelector("#totaldisplay");
 
@@ -26,6 +28,7 @@ let total = null;
 let equals = false;
 
 // Event Listeners NumBtns
+
 document.querySelectorAll(".numbtn").forEach((item) => {
   item.addEventListener("click", (e) => {
     item === btn1
@@ -50,20 +53,40 @@ document.querySelectorAll(".numbtn").forEach((item) => {
   });
 });
 
-// Event Listeners Operator Buttons
+btndecimal.addEventListener("click", () => {
+  if (!caldisplay.textContent.includes(".") && caldisplay.textContent[0]) {
+    caldisplay.textContent += ".";
+  }
+});
 
+// Event Listeners Clear and Delete
+btnclear.addEventListener("click", () => {
+  operation = null;
+  num2 = null;
+  num1 = null;
+  total = null;
+  equals = false;
+  caldisplay.textContent = null;
+  totaldisplay.textContent = null;
+});
+
+btndelete.addEventListener("click", () => {
+  if (caldisplay.textContent) {
+    caldisplay.textContent = caldisplay.textContent.slice(0, -1);
+  }
+});
+
+// Event Listeners Operator Buttons
 document.querySelectorAll(".opbtn").forEach((item) => {
   item.addEventListener("click", (e) => {
     if (caldisplay.textContent) {
       if (num2 === null && num1 !== null) {
-        num2 = caldisplay.textContent;
-        num2 = parseInt(num2);
+        num2 = parseFloat(caldisplay.textContent);
         caldisplay.textContent = null;
         operate(operation);
       }
       if (num1 === null) {
-        num1 = caldisplay.textContent;
-        num1 = parseInt(num1);
+        num1 = parseFloat(caldisplay.textContent);
         caldisplay.textContent = null;
       }
     }
@@ -71,28 +94,24 @@ document.querySelectorAll(".opbtn").forEach((item) => {
 });
 
 btnadd.addEventListener("click", () => {
-  console.log(num1, num2, total, equals);
   if (operation === null) {
     operation = "add";
   }
 });
 
 btnsub.addEventListener("click", () => {
-  console.log(num1, num2);
   if (operation === null) {
     operation = "subtract";
   }
 });
 
 btnmulti.addEventListener("click", () => {
-  console.log(num1, num2);
   if (operation === null) {
     operation = "multiply";
   }
 });
 
 btndivi.addEventListener("click", () => {
-  console.log(num1, num2);
   if (operation === null) {
     operation = "divide";
   }
@@ -100,26 +119,29 @@ btndivi.addEventListener("click", () => {
 
 btnequals.addEventListener("click", (e) => {
   equals = true;
-  operate(operation);
+  if (num2 === null && num1 !== null) {
+    num2 = parseFloat(caldisplay.textContent);
+    caldisplay.textContent = null;
+    operate(operation);
+  }
 });
 
-// Opertaor Functions
+// Operator Functions
 function add(value1, value2) {
   total = value1 + value2;
   totaldisplay.textContent = total;
-  if (!equals) {
+  if (equals === false) {
     operation = null;
     num2 = null;
     num1 = total;
     return;
   }
-  if (equals) {
+  if (equals === true) {
     operation = null;
     num2 = null;
     num1 = null;
     total = null;
     equals = false;
-    console.log(num1, num2, total, equals);
     return;
   }
 }
@@ -127,47 +149,68 @@ function add(value1, value2) {
 function subtract(value1, value2) {
   total = value1 - value2;
   totaldisplay.textContent = total;
-  operation = null;
-  console.log(operation);
-  num2 = null;
-  num1 = total;
-  console.log(num1, num2);
-  return;
+  if (equals === false) {
+    operation = null;
+    num2 = null;
+    num1 = total;
+    return;
+  }
+  if (equals === true) {
+    operation = null;
+    num2 = null;
+    num1 = null;
+    total = null;
+    equals = false;
+    return;
+  }
 }
 
 function multiply(value1, value2) {
   total = value1 * value2;
   totaldisplay.textContent = total;
-  operation = null;
-  console.log(operation);
-  num2 = null;
-  num1 = total;
-  console.log(num1, num2);
-  return;
+  if (equals === false) {
+    operation = null;
+    num2 = null;
+    num1 = total;
+    return;
+  }
+  if (equals === true) {
+    operation = null;
+    num2 = null;
+    num1 = null;
+    total = null;
+    equals = false;
+    return;
+  }
 }
 
 function divide(value1, value2) {
   total = value1 / value2;
   totaldisplay.textContent = total;
-  operation = null;
-  console.log(operation);
-  num2 = null;
-  num1 = total;
-  console.log(num1, num2);
-  return;
+  if (equals === false) {
+    operation = null;
+    num2 = null;
+    num1 = total;
+    return;
+  }
+  if (equals === true) {
+    operation = null;
+    num2 = null;
+    num1 = null;
+    total = null;
+    equals = false;
+    return;
+  }
 }
 
 function operate(operation) {
-  if (operation === "add") {
-    add(num1, num2);
-  }
-  if (operation === "subtract") {
-    subtract(num1, num2);
-  }
-  if (operation === "multiply") {
-    multiply(num1, num2);
-  }
-  if (operation === "divide") {
-    divide(num1, num2);
-  }
+  operation === "add"
+    ? add(num1, num2)
+    : operation === "subtract"
+    ? subtract(num1, num2)
+    : operation === "multiply"
+    ? multiply(num1, num2)
+    : divide(num1, num2);
 }
+
+// ADD FUNCTIONALITY SO SUM IS DISPLAYED AT THE TOP AND TOTAL AT THE BOTTOM!
