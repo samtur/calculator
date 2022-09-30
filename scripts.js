@@ -18,7 +18,7 @@ const btnequals = document.querySelector("#btnequals");
 const btnclear = document.querySelector("#btnclear");
 const btndelete = document.querySelector("#btndelete");
 const caldisplay = document.querySelector("#caldisplay");
-const totaldisplay = document.querySelector("#totaldisplay");
+const sumdisplay = document.querySelector("#sumdisplay");
 
 // Variables
 let num1 = null;
@@ -26,11 +26,21 @@ let num2 = null;
 let operation = null;
 let total = null;
 let equals = false;
+let clear = null;
+let operator = null;
 
 // Event Listeners NumBtns
 
 document.querySelectorAll(".numbtn").forEach((item) => {
   item.addEventListener("click", (e) => {
+    if (clear !== null) {
+      if (equals === true) {
+        sumdisplay.textContent = null;
+      }
+      equals = false;
+      caldisplay.textContent = null;
+      clear = null;
+    }
     item === btn1
       ? (caldisplay.textContent += 1)
       : item === btn2
@@ -67,7 +77,7 @@ btnclear.addEventListener("click", () => {
   total = null;
   equals = false;
   caldisplay.textContent = null;
-  totaldisplay.textContent = null;
+  sumdisplay.textContent = null;
 });
 
 btndelete.addEventListener("click", () => {
@@ -83,11 +93,16 @@ document.querySelectorAll(".opbtn").forEach((item) => {
       if (num2 === null && num1 !== null) {
         num2 = parseFloat(caldisplay.textContent);
         caldisplay.textContent = null;
+        sumdisplay.textContent += ` ${operator} ${num2}`;
         operate(operation);
       }
       if (num1 === null) {
         num1 = parseFloat(caldisplay.textContent);
         caldisplay.textContent = null;
+        if (equals !== true) {
+          sumdisplay.textContent += `${num1}`;
+        }
+        equals = false;
       }
     }
   });
@@ -96,24 +111,28 @@ document.querySelectorAll(".opbtn").forEach((item) => {
 btnadd.addEventListener("click", () => {
   if (operation === null) {
     operation = "add";
+    operator = "+";
   }
 });
 
 btnsub.addEventListener("click", () => {
   if (operation === null) {
     operation = "subtract";
+    operator = "-";
   }
 });
 
 btnmulti.addEventListener("click", () => {
   if (operation === null) {
     operation = "multiply";
+    operator = "×";
   }
 });
 
 btndivi.addEventListener("click", () => {
   if (operation === null) {
     operation = "divide";
+    operator = "÷";
   }
 });
 
@@ -129,76 +148,38 @@ btnequals.addEventListener("click", (e) => {
 // Operator Functions
 function add(value1, value2) {
   total = value1 + value2;
-  totaldisplay.textContent = total;
-  if (equals === false) {
-    operation = null;
-    num2 = null;
-    num1 = total;
-    return;
-  }
-  if (equals === true) {
-    operation = null;
-    num2 = null;
-    num1 = null;
-    total = null;
-    equals = false;
-    return;
-  }
+  checkEquals(total);
 }
 
 function subtract(value1, value2) {
   total = value1 - value2;
-  totaldisplay.textContent = total;
-  if (equals === false) {
-    operation = null;
-    num2 = null;
-    num1 = total;
-    return;
-  }
-  if (equals === true) {
-    operation = null;
-    num2 = null;
-    num1 = null;
-    total = null;
-    equals = false;
-    return;
-  }
+  checkEquals(total);
 }
 
 function multiply(value1, value2) {
   total = value1 * value2;
-  totaldisplay.textContent = total;
-  if (equals === false) {
-    operation = null;
-    num2 = null;
-    num1 = total;
-    return;
-  }
-  if (equals === true) {
-    operation = null;
-    num2 = null;
-    num1 = null;
-    total = null;
-    equals = false;
-    return;
-  }
+  checkEquals(total);
 }
 
 function divide(value1, value2) {
   total = value1 / value2;
-  totaldisplay.textContent = total;
+  checkEquals(total);
+}
+
+function checkEquals(tot) {
+  caldisplay.textContent = tot;
+  clear = 1;
+  operation = null;
   if (equals === false) {
-    operation = null;
     num2 = null;
-    num1 = total;
+    num1 = tot;
     return;
   }
   if (equals === true) {
-    operation = null;
+    sumdisplay.textContent += ` ${operator} ${num2}`;
     num2 = null;
     num1 = null;
-    total = null;
-    equals = false;
+    tot = null;
     return;
   }
 }
@@ -212,5 +193,3 @@ function operate(operation) {
     ? multiply(num1, num2)
     : divide(num1, num2);
 }
-
-// ADD FUNCTIONALITY SO SUM IS DISPLAYED AT THE TOP AND TOTAL AT THE BOTTOM!
