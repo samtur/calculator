@@ -17,6 +17,7 @@ const btndivi = document.querySelector("#btndivi");
 const btnequals = document.querySelector("#btnequals");
 const btnclear = document.querySelector("#btnclear");
 const btndelete = document.querySelector("#btndelete");
+const btnpercent = document.querySelector("#btnpercent");
 const caldisplay = document.querySelector("#caldisplay");
 const sumdisplay = document.querySelector("#sumdisplay");
 
@@ -108,6 +109,13 @@ document.querySelectorAll(".opbtn").forEach((item) => {
   });
 });
 
+btnpercent.addEventListener("click", () => {
+  if (operation === null) {
+    operation = "percent";
+    operator = "%";
+  }
+});
+
 btnadd.addEventListener("click", () => {
   if (operation === null) {
     operation = "add";
@@ -146,6 +154,11 @@ btnequals.addEventListener("click", (e) => {
 });
 
 // Operator Functions
+function percent(value1, value2) {
+  total = (value1 * value2) / 100;
+  checkEquals(total);
+}
+
 function add(value1, value2) {
   total = value1 + value2;
   checkEquals(total);
@@ -191,5 +204,7 @@ function operate(operation) {
     ? subtract(num1, num2)
     : operation === "multiply"
     ? multiply(num1, num2)
-    : divide(num1, num2);
+    : operation === "divide"
+    ? divide(num1, num2)
+    : percent(num1, num2);
 }
