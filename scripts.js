@@ -31,6 +31,18 @@ let clear = null;
 let operator = null;
 
 // Event Listeners NumBtns
+function activebutton(e) {
+  e.target.classList.add("btnactive");
+}
+
+function inactive(e) {
+  e.target.classList.remove("btnactive");
+}
+
+document.querySelectorAll(".btn").forEach((btn) => {
+  btn.addEventListener("mousedown", activebutton);
+  btn.addEventListener("mouseup", inactive);
+});
 
 document.querySelectorAll(".numbtn").forEach((item) => {
   item.addEventListener("click", (e) => {
